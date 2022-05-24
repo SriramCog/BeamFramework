@@ -98,3 +98,4 @@ def write_bigquery(pc):
             schema=bigquery_config_write['table_schema'],
             create_disposition=bigquery_config_write['create_disposition'],
             write_disposition=bigquery_config_write['write_disposition'])
+        return final
