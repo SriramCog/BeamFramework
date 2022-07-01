@@ -439,7 +439,7 @@ runner_type, streaming_ind = ['DataflowRunner',
 
 dataflowrunner_config = {'project': projectid,
                          'runner': 'DataflowRunner',
-                         'jobname': 'test_'+datetime.now(pytz.timezone('US/Eastern')).strftime('%Y%m%d_%H%M%S'),
+                         'jobname': 'test'+datetime.now(pytz.timezone('US/Eastern')).strftime('%Y%m%d%H%M%S'),
                          'temp_bucket': bucket_name+'/temp_folder',
                          'staging_bucket': bucket_name+'/staging_folder',
                          'region': 'us-central1-a',
