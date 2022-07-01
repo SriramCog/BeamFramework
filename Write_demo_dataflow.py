@@ -442,7 +442,7 @@ dataflowrunner_config = {'project': projectid,
                          'jobname': 'test'+datetime.now(pytz.timezone('US/Eastern')).strftime('%Y%m%d%H%M%S'),
                          'temp_bucket': bucket_name+'/temp_folder',
                          'staging_bucket': bucket_name+'/staging_folder',
-                         'region': 'us-central1-a',
+                         'region': 'us-central1',
                          'streaming_ind': False,
                          'save_main_session_ind': True}
 
