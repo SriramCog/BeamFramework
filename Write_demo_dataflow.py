@@ -54,7 +54,7 @@ logger.addHandler(FileHandler)
 
 # Config 1 - GCP config 
 
-projectid = 'qwiklabs-gcp-03-bd1894c6c632'
+projectid = 'qwiklabs-gcp-01-d3435b61d35d'
 bucket_name = 'gs://'+projectid
 bigquery_datasetid = projectid+'.dataset1'
 bigquery_datasetid1 = projectid+':dataset1'
