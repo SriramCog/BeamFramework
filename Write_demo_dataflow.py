@@ -616,8 +616,9 @@ def convert_types(data):
 pc1 = Ingestion.read_csv(p)
 
 pc2 = (pc1
-        | 'SplitData' >> beam.Map(lambda x: x.split('","'))
-        | 'RemovingQuotes' >> beam.Map(rm_quotes))
+      | 'SplitData' >> beam.Map(lambda x: x.split('","'))
+      | 'RemovingQuotes' >> beam.Map(rm_quotes)
+      )
 
 pc3 = (pc2 | 'conv_text' >> beam.Map(lambda x: ','.join(x)))
 
