@@ -1,6 +1,6 @@
 #!pip install apache_beam[gcp]
 #
-# !git clone https://github.com/Srimdu/beambqtest1
+#!git clone https://github.com/Srimdu/beambqtest1
 #
 #!bq mk dataset1
 #
@@ -54,7 +54,7 @@ logger.addHandler(FileHandler)
 
 # Config 1 - GCP config 
 
-projectid = 'qwiklabs-gcp-01-d3435b61d35d'
+projectid = 'qwiklabs-gcp-03-bd1894c6c632'
 bucket_name = 'gs://'+projectid
 bigquery_datasetid = projectid+'.dataset1'
 bigquery_datasetid1 = projectid+':dataset1'
@@ -464,33 +464,6 @@ if runner_type in ['DirectRunner', 'SparkRunner']:
     client = bigquery.Client()
     dataset = bigquery.Dataset(bigquery_datasetid)
 
-def parse_doublequotes(element):
-    for line in csv.reader([element], quotechar='"', delimiter=',', skipinitialspace=True):
-        return line
-
-
-def convert_types(data):
-    # """Converts string values to their appropriate type."""
-    data['Data_Precipitation'] = float(data['Data_Precipitation']) if 'Data_Precipitation' in data else None
-    data['Date_Full'] = str(data['Date_Full']) if 'Date_Full' in data else None
-    data['Date_Month'] = int(data['Date_Month']) if 'Date_Month' in data else None
-    data['Date_Week_of'] = int(data['Date_Week_of']) if 'Date_Week_of' in data else None
-    data['Date_Year'] = int(data['Date_Year']) if 'Date_Year' in data else None
-    data['Station_City'] = str(data['Station_City']) if 'Station_City' in data else None
-    data['Station_Code'] = str(data['Station_Code']) if 'Station_Code' in data else None
-    data['Station_Location'] = str(data['Station_Location']) if 'Station_Location' in data else None
-    data['Station_State'] = str(data['Station_State']) if 'Station_State' in data else None
-    data['Data_Temperature_Avg_Temp'] = int(
-    data['Data_Temperature_Avg_Temp']) if 'Data_Temperature_Avg_Temp' in data else None
-    data['Data_Temperature_Max_Temp'] = int(
-    data['Data_Temperature_Max_Temp']) if 'Data_Temperature_Max_Temp' in data else None
-    data['Data_Temperature_Min_Temp'] = int(
-    data['Data_Temperature_Min_Temp']) if 'Data_Temperature_Min_Temp' in data else None
-    data['Data_Wind_Direction'] = int(data['Data_Wind_Direction']) if 'Data_Wind_Direction' in data else None
-    data['Data_Wind_Speed'] = float(data['Data_Wind_Speed']) if 'Data_Wind_Speed' in data else None
-    return data
-
-
 
 if runner_type == 'DataflowRunner':
     pipeline_options = PipelineOptions(
@@ -615,9 +588,11 @@ read_config_bigquery = {
 
 #pc1 = Ingestion.read_bigquery(p)
 
-def parse_doublequotes(element):
-    for line in csv.reader([element], quotechar='"', delimiter=',', skipinitialspace=True):
-        return line
+def rm_quotes(data):
+    """Function used to remove quotes in the data"""
+    data[0] = data[0].replace('"','')
+    data[-1] = data[-1].replace('"','')
+    return data
 
 
 def convert_types(data):
@@ -640,7 +615,9 @@ def convert_types(data):
 
 pc1 = Ingestion.read_csv(p)
 
-pc2 = (pc1 | 'split_obj1' >> beam.Map(parse_doublequotes))
+pc2 = (pc1
+        | 'SplitData' >> beam.Map(lambda x: x.split('","'))
+        | 'RemovingQuotes' >> beam.Map(rm_quotes))
 
 pc3 = (pc2 | 'conv_text' >> beam.Map(lambda x: ','.join(x)))
 
